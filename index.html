@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de Perfil Profissional - Vitor de Oliveira Benz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: A tab-based single-page application (SPA) was designed to provide a layered, exploratory experience. The structure starts with a high-level "Painel" (Dashboard) for quick assessment, including a verdict and key metrics. Users can then navigate to dedicated sections: "Análise SWOT" for strategic positioning, "Trajetória" for a visual career timeline, and "Plano de Ação" to demonstrate proactivity. This non-linear structure is superior to a simple scrollable report as it allows different users (e.g., a recruiter vs. the candidate) to access the information most relevant to them efficiently, enhancing usability and engagement. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Competency Scores -> Goal: Inform/Compare -> Viz: Radar Chart -> Interaction: Hover tooltips -> Justification: Provides a holistic, at-a-glance view of skill balance, which is more intuitive than a table. -> Library: Chart.js/Canvas.
+        - Report Info: Job History -> Goal: Show Growth -> Viz: Vertical Timeline Diagram -> Interaction: Click to expand -> Justification: Creates a narrative of career progression that is more engaging and visually appealing than a list. -> Method: HTML/CSS/JS.
+        - Report Info: SWOT Analysis -> Goal: Organize/Strategize -> Viz: Four-Quadrant Grid -> Interaction: Click to highlight -> Justification: Uses a familiar business framework for clarity. Interactivity focuses user attention on one area at a time. -> Method: HTML/CSS/JS.
+        - Report Info: 90-Day Plan -> Goal: Demonstrate Proactivity -> Viz: Tabbed Interface -> Interaction: Click tabs to switch content -> Justification: Organizes sequential information cleanly and compactly, showing strategic thinking. -> Method: HTML/CSS/JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4; /* Warm off-white */
+            color: #4A4A4A; /* Dark Gray */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 45vh;
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-button.active {
+            border-bottom-color: #4A69BD; /* Muted Blue Accent */
+            color: #4A69BD;
+        }
+        .swot-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1.25rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #E0E0E0;
+            transform: translateX(-50%);
+        }
+        .timeline-item-dot {
+            position: absolute;
+            left: 1.25rem;
+            top: 0.25rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background-color: #F8F7F4;
+            border: 2px solid #4A69BD;
+            transform: translateX(-50%);
+        }
+        .tab-button.active {
+            background-color: #4A69BD;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-[#3D405B]">Análise de Perfil Profissional</h1>
+            <p class="text-xl text-[#816C61] mt-2">Vitor de Oliveira Benz | Inspetor de Segurança</p>
+        </header>
+
+        <nav class="flex justify-center border-b border-gray-200 mb-8">
+            <button data-section="painel" class="nav-button active font-semibold py-2 px-4">Painel Estratégico</button>
+            <button data-section="swot" class="nav-button font-semibold py-2 px-4">Análise Estratégica</button>
+            <button data-section="trajetoria" class="nav-button font-semibold py-2 px-4">Trajetória Profissional</button>
+            <button data-section="plano" class="nav-button font-semibold py-2 px-4">Plano de Ação</button>
+        </nav>
+
+        <main>
+            <section id="section-painel" class="content-section">
+                <div class="text-center mb-8">
+                     <h2 class="text-2xl font-bold text-[#3D405B] mb-2">Diagnóstico do Perfil</h2>
+                     <p class="max-w-3xl mx-auto text-gray-600">Esta seção oferece um resumo executivo da análise, destacando o veredito geral sobre a prontidão do candidato, suas competências chave visualizadas em um gráfico interativo e as principais recomendações estratégicas para maximizar seu potencial.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                        <h3 class="text-xl font-bold text-[#4A69BD] mb-4">Veredito: Líder Operacional com Foco em Resultados e Parceria com o Cliente</h3>
+                        <p class="mb-4">A análise revela um perfil com rara sinergia entre excelência operacional e visão de negócio. A capacidade de gerir operações de segurança complexas, aliada à expertise em tecnologia, posiciona o candidato como um parceiro estratégico, capaz de otimizar custos, agregar valor aos contratos e fortalecer o relacionamento com o cliente.</p>
+                        <div class="space-y-4">
+                             <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
+                                 <h4 class="font-bold">Proposta de Valor Central</h4>
+                                 <p>Liderança de operações com foco na otimização de recursos, na maximização da satisfação e na retenção de clientes, transformando a segurança em um diferencial competitivo.</p>
+                             </div>
+                        </div>
+                         <h3 class="text-xl font-bold text-[#4A69BD] mt-6 mb-4">Argumentos para Contratação</h3>
+                         <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><strong>Alavancagem Tecnológica:</strong> Utilizar a expertise em TI para otimizar custos operacionais e agregar valor tecnológico aos contratos de segurança.</li>
+                            <li><strong>Foco no Cliente (CX):</strong> Aplicar a comunicação didática para fortalecer o relacionamento com o cliente, impactando positivamente a renovação de contratos.</li>
+                            <li><strong>Eficiência Financeira:</strong> Empregar uma liderança humanizada para reduzir a rotatividade (turnover) da equipe, gerando estabilidade e eficiência financeira.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                            <h3 class="text-xl font-bold text-center text-[#4A69BD] mb-4">Scorecard de Competências</h3>
+                            <div class="chart-container">
+                                <canvas id="competencyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="section-swot" class="content-section hidden">
+                 <div class="text-center mb-8">
+                     <h2 class="text-2xl font-bold text-[#3D405B] mb-2">Análise Estratégica: Forças e Oportunidades</h2>
+                     <p class="max-w-3xl mx-auto text-gray-600">Esta análise foca nos seus principais ativos (Forças) e nas tendências de mercado que favorecem seu perfil (Oportunidades), destacando o potencial de geração de valor para a empresa.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="swot-card bg-green-100 p-6 rounded-xl border-2 border-green-200" data-swot="forcas">
+                        <h3 class="text-2xl font-bold text-green-800">Forças</h3>
+                        <div id="swot-forcas-details" class="mt-4 space-y-2 hidden">
+                           <p><strong>Gestão de Contratos de Grande Porte:</strong> Experiência comprovada gerenciando operações complexas, demonstrando capacidade de assegurar a rentabilidade e a qualidade em larga escala.</p>
+                           <p><strong>Perfil Híbrido (Segurança + TI):</strong> Diferencial que permite implementar soluções inovadoras para otimizar operações e aumentar a percepção de valor pelo cliente.</p>
+                           <p><strong>Visão 360° da Operação:</strong> Trajetória que garante uma gestão eficiente, com profundo conhecimento dos desafios operacionais e das oportunidades de melhoria.</p>
+                           <p><strong>Gestão de Capital Humano:</strong> Maturidade para gerenciar o principal ativo da empresa, com foco na redução de turnover e custos associados.</p>
+                        </div>
+                    </div>
+                     <div class="swot-card bg-blue-100 p-6 rounded-xl border-2 border-blue-200" data-swot="oportunidades">
+                        <h3 class="text-2xl font-bold text-blue-800">Oportunidades de Negócio</h3>
+                         <div id="swot-oportunidades-details" class="mt-4 space-y-2 hidden">
+                           <p><strong>Liderar Projetos de Modernização:</strong> Oferecer aos clientes soluções de segurança mais eficientes e com maior valor agregado, fortalecendo a posição competitiva da empresa.</p>
+                           <p><strong>Diferenciação por Serviço (CX):</strong> Transformar a segurança de um centro de custo em um fator de retenção de clientes, impactando positivamente a renovação de contratos.</p>
+                           <p><strong>Atender à Alta Demanda do Mercado:</strong> Capitalizar na procura constante por Inspetores de Segurança qualificados para expandir a carteira de clientes e a receita.</p>
+                        </div>
+                    </div>
+                </div>
+                 <p class="text-center mt-6 text-gray-500 italic">Clique nos cartões para expandir os detalhes.</p>
+            </section>
+
+            <section id="section-trajetoria" class="content-section hidden">
+                <div class="text-center mb-12">
+                     <h2 class="text-2xl font-bold text-[#3D405B] mb-2">Trajetória Profissional</h2>
+                     <p class="max-w-3xl mx-auto text-gray-600">Esta linha do tempo interativa ilustra a progressão de carreira, destacando um crescimento consistente e orgânico. Clique em cada marco para visualizar os detalhes das responsabilidades e conquistas, demonstrando a jornada da base operacional à liderança tática.</p>
+                </div>
+                <div class="relative pl-10 timeline">
+                    <div class="timeline-item mb-12">
+                        <div class="timeline-item-dot"></div>
+                        <h3 class="text-lg font-bold text-[#4A69BD]">Fiscal Operacional</h3>
+                        <p class="text-sm text-gray-500">Alpha Secure | mai/2024 - nov/2024</p>
+                        <div class="text-gray-700 mt-2 bg-white p-4 rounded-lg border border-gray-200">
+                           <p><strong>Escopo:</strong> Gestão de <strong>150+ colaboradores</strong> em <strong>37 postos</strong> distribuídos por <strong>17 cidades</strong>.</p>
+                           <p><strong>Responsabilidades:</strong> Liderança tática, rondas, inspeções, gestão de escalas, conformidade de EPIs e ciclo completo de RH (contratações e demissões).</p>
+                           <p><strong>Impacto Comercial:</strong> Responsável pelo relacionamento com os gestores dos contratos, garantindo o alinhamento das operações com as expectativas do cliente e identificando oportunidades de melhoria no serviço.</p>
+                        </div>
+                    </div>
+                     <div class="timeline-item mb-12">
+                        <div class="timeline-item-dot"></div>
+                        <h3 class="text-lg font-bold text-[#4A69BD]">Vigilante Armado</h3>
+                        <p class="text-sm text-gray-500">Graber | fev/2022 - abr/2024</p>
+                        <div class="text-gray-700 mt-2 bg-white p-4 rounded-lg border border-gray-200">
+                           <p>Atuação técnica em área de grande extensão (80.000m²), reforçando habilidades de linha de frente, prontidão e conformidade com procedimentos rigorosos.</p>
+                        </div>
+                    </div>
+                     <div class="timeline-item mb-12">
+                        <div class="timeline-item-dot"></div>
+                        <h3 class="text-lg font-bold text-[#4A69BD]">Líder de Portaria</h3>
+                        <p class="text-sm text-gray-500">Gocil | jun/2019 - jan/2022</p>
+                         <div class="text-gray-700 mt-2 bg-white p-4 rounded-lg border border-gray-200">
+                           <p>Liderança inicial de uma equipe de 8 controladores em empresa multinacional, assegurando a integridade dos processos fiscais e logísticos do cliente, minimizando perdas e riscos.</p>
+                        </div>
+                    </div>
+                     <div class="timeline-item">
+                        <div class="timeline-item-dot"></div>
+                        <h3 class="text-lg font-bold text-[#4A69BD]">Porteiro</h3>
+                        <p class="text-sm text-gray-500">Core Serviços | mar/2018 - jun/2019</p>
+                        <div class="text-gray-700 mt-2 bg-white p-4 rounded-lg border border-gray-200">
+                           <p>Início da carreira, construindo o alicerce fundamental em rotinas de controle de acesso e segurança em condomínio de alto padrão. Essa experiência garante uma compreensão profunda da realidade do "chão de fábrica".</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="section-plano" class="content-section hidden">
+                <div class="text-center mb-8">
+                     <h2 class="text-2xl font-bold text-[#3D405B] mb-2">Plano de Ação: Primeiros 90 Dias</h2>
+                     <p class="max-w-3xl mx-auto text-gray-600">Apresentar um plano de ação demonstra proatividade e pensamento estratégico. Esta seção detalha uma estratégia 30-60-90 dias, mostrando como o candidato pode agregar valor desde o primeiro dia no cargo de Inspetor de Segurança. Use as abas para navegar entre as fases.</p>
+                </div>
+                 <div class="w-full max-w-2xl mx-auto">
+                    <div class="mb-4 flex space-x-2 p-1 bg-gray-200 rounded-lg">
+                        <button class="tab-button w-full text-center p-2 rounded-md font-semibold transition-colors duration-300" data-tab="30">Dias 1-30</button>
+                        <button class="tab-button w-full text-center p-2 rounded-md font-semibold transition-colors duration-300" data-tab="60">Dias 31-60</button>
+                        <button class="tab-button w-full text-center p-2 rounded-md font-semibold transition-colors duration-300" data-tab="90">Dias 61-90</button>
+                    </div>
+
+                    <div id="tab-content" class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                         <div id="tab-30" class="tab-pane space-y-3">
+                            <h3 class="text-xl font-bold text-[#4A69BD]">Fase 1: Imersão e Diagnóstico Comercial</h3>
+                            <p><strong>Foco Principal:</strong> Aprender, Construir Relacionamentos e Entender o Negócio.</p>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li>Mapear as expectativas comerciais e os KPIs contratuais de cada cliente para alinhar minha supervisão com a rentabilidade e a satisfação esperada.</li>
+                                <li>Realizar reuniões individuais com 100% dos líderes de posto e contatos-chave dos clientes.</li>
+                                <li>Dominar os sistemas internos da empresa (gestão de escalas, relatórios, RH).</li>
+                                <li>Analisar profundamente os KPIs e SLAs de cada contrato.</li>
+                            </ul>
+                            <p class="font-bold pt-2"><strong>Resultado Esperado:</strong> Apresentar um Relatório de Diagnóstico Inicial, com foco em oportunidades de otimização de custos e melhoria da satisfação do cliente.</p>
+                        </div>
+                        <div id="tab-60" class="tab-pane hidden space-y-3">
+                            <h3 class="text-xl font-bold text-[#4A69BD]">Fase 2: Otimização e Geração de Valor</h3>
+                             <p><strong>Foco Principal:</strong> Contribuir, Otimizar e Agregar Valor.</p>
+                            <ul class="list-disc list-inside space-y-2">
+                               <li>Propor um plano de otimização de processo com foco na redução de custos operacionais ou no aumento do valor percebido pelo cliente.</li>
+                               <li>Realizar Análise de Necessidades de Treinamento (ANT) com foco em habilidades que melhorem o atendimento ao cliente (CX).</li>
+                               <li>Implementar uma melhoria rápida ("quick win") e medir seu impacto comercial.</li>
+                               <li>Fortalecer o relacionamento com clientes através de reuniões de feedback proativas.</li>
+                            </ul>
+                            <p class="font-bold pt-2"><strong>Resultado Esperado:</strong> Apresentar um plano de otimização com ROI (Retorno sobre o Investimento) projetado.</p>
+                        </div>
+                        <div id="tab-90" class="tab-pane hidden space-y-3">
+                            <h3 class="text-xl font-bold text-[#4A69BD]">Fase 3: Liderança, Consolidação e Resultados de Negócio</h3>
+                             <p><strong>Foco Principal:</strong> Liderar, Entregar Resultados e Propor Melhorias.</p>
+                             <ul class="list-disc list-inside space-y-2">
+                                <li>Liderar a implementação do plano de otimização, comunicando os benefícios para a equipe e o cliente.</li>
+                                <li>Ministrar o primeiro módulo do novo programa de treinamento focado em CX.</li>
+                                <li>Assumir plena autonomia na gestão da equipe, com foco em desempenho e motivação.</li>
+                                <li>Apresentar o primeiro relatório consolidado de desempenho da área, com análise de KPIs comerciais.</li>
+                             </ul>
+                             <p class="font-bold pt-2"><strong>Resultado Esperado:</strong> Apresentar um Relatório de Resultados dos 90 Dias, demonstrando o valor agregado em termos de eficiência, satisfação do cliente e controle de custos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const competencyData = {
+                labels: [
+                    'Liderança de Equipes',
+                    'Gestão Operacional',
+                    'Afinidade com Tecnologia',
+                    'Análise de Sistemas & UI',
+                    'Comunicação (CX)',
+                    'Formação Acadêmica',
+                    '',
+                ],
+                datasets: [{
+                    label: 'Pontuação (de 5)',
+                    data: [5, 4.5, 4.8, 4.2, 4, 4, 0],
+                    fill: true,
+                    backgroundColor: 'rgba(74, 105, 189, 0.2)',
+                    borderColor: 'rgb(74, 105, 189)',
+                    pointBackgroundColor: 'rgb(74, 105, 189)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(74, 105, 189)'
+                }]
+            };
+
+            const competencyChartConfig = {
+                type: 'radar',
+                data: competencyData,
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 12,
+                                    weight: 'bold'
+                                },
+                                color: '#4A4A4A'
+                            },
+                            ticks: {
+                                min: 2,
+                                max: 5,
+                                stepSize: 1,
+                                backdropColor: 'transparent',
+                                color: '#816C61'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            };
+            
+            const competencyChartCtx = document.getElementById('competencyChart').getContext('2d');
+            new Chart(competencyChartCtx, competencyChartConfig);
+
+            const navButtons = document.querySelectorAll('.nav-button');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const sectionId = button.dataset.section;
+
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    contentSections.forEach(section => {
+                        if (section.id === 'section-' + sectionId) {
+                            section.classList.remove('hidden');
+                        } else {
+                            section.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const swotCards = document.querySelectorAll('.swot-card');
+            swotCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const detailsId = 'swot-' + card.dataset.swot + '-details';
+                    const detailsDiv = document.getElementById(detailsId);
+                    detailsDiv.classList.toggle('hidden');
+                    card.classList.toggle('ring-2');
+                    card.classList.toggle('ring-[#4A69BD]');
+                });
+            });
+            
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            // Set initial active tab
+            document.querySelector('.tab-button[data-tab="30"]').classList.add('active');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tab;
+
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    tabPanes.forEach(pane => {
+                        if (pane.id === 'tab-' + tabId) {
+                            pane.classList.remove('hidden');
+                        } else {
+                            pane.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
